@@ -60,7 +60,7 @@ const ItemForm = ({ title, form, setForm, onSubmit }) => {
 
                 <input
                     type="number"
-                    step="0.01"
+                    step="1"
                     name="precio"
                     value={form.precio}
                     onChange={handleChange}

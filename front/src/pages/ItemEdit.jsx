@@ -60,7 +60,7 @@ const ItemEdit = () => {
             form={form}
             setForm={setForm}
             onSubmit={handleSubmit} 
-            title="Editar Item"
+            title="Editar Producto"
         />
     );
 };
