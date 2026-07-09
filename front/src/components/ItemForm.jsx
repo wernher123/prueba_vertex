@@ -88,11 +88,19 @@ const ItemForm = ({ title, form, setForm, onSubmit }) => {
                     URL Imagen
                 </label>
 
-                <input
+                {/* <input
                     type="text"
                     name="url"
                     value={form.url}
                     onChange={handleChange}
+                    className="w-full border rounded-lg px-3 py-2"
+                /> */}
+
+                <input
+                    type="file"
+                    name="imagen"
+                    accept="image/*"
+                    // onChange={handleFileChange}  
                     className="w-full border rounded-lg px-3 py-2"
                 />
             </div>
