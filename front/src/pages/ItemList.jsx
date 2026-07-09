@@ -20,6 +20,28 @@ const ItemList = () => {
         getItems();
     }, []);
 
+    const handleDelete = async (id_item) => {
+
+    const confirmar = window.confirm("¿Eliminar este producto?");
+
+    if (!confirmar) return;
+
+    try {
+
+        const response = await api.delete(`/deleteItem/${id_item}`);
+
+        alert(response.data.message);
+
+        setItems(prev =>
+            prev.filter(item => item.id_item !== id_item)
+        );
+
+    } catch (error) {
+        console.error(error);
+    }
+
+};
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
             <h1 className="text-3xl font-bold">
@@ -41,6 +63,7 @@ const ItemList = () => {
                     <ItemCard
                         key={item.id_item}
                         item={item}
+                        onDelete={handleDelete}
                     />
                 ))}
 

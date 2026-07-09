@@ -1,6 +1,7 @@
+import { useNavigate } from "react-router-dom";
 
 const ItemForm = ({ title, form, setForm, onSubmit }) => {
-
+    const navigate = useNavigate();
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -103,6 +104,13 @@ const ItemForm = ({ title, form, setForm, onSubmit }) => {
                 Guardar
             </button>
 
+            <button
+                type="button"
+                onClick={() => navigate("/items")}
+                className="w-full bg-red-600 hover:bg-red-700 text-white rounded-lg py-2"
+            >
+                Cancelar
+            </button>
         </form>
     );
 };

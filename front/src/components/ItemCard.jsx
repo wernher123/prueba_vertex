@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const ItemCard = ({ item }) => {
+const ItemCard = ({ item, onDelete  }) => {
     const navigate = useNavigate();
 
     return (
@@ -40,6 +40,7 @@ const ItemCard = ({ item }) => {
                     </button>
 
                     <button
+                        onClick={() => onDelete(item.id_item)}
                         className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition"
                     >
                         Eliminar
