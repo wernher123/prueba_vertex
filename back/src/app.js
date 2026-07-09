@@ -2,6 +2,7 @@ import express from 'express'
 import config from './config.js'
 import morgan from 'morgan'
 import cors from 'cors'
+import item_router from './routes/item.routes.js'
 
 const app = express()
 
@@ -11,5 +12,7 @@ app.set('port', config.port)
 app.use(morgan('dev'))
 app.use(cors())
 app.use(express.json())
+
+app.use(item_router)
 
 export default app
