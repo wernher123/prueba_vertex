@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import api from "../api/axios";
 
-const ItemForm = ({ title, form, setForm, onSubmit }) => {
+const ItemForm = ({ title, form, setForm, onSubmit, isEditing = false }) => {
     const navigate = useNavigate();
+    const [uploadingImage, setUploadingImage] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -13,7 +17,57 @@ const ItemForm = ({ title, form, setForm, onSubmit }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!form.url) {
+            alert('Por favor sube una imagen');
+            return;
+        }
         onSubmit(form);
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validar tipo MIME
+        const validMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+        if (!validMimes.includes(file.type)) {
+            alert('Solo se permiten imágenes (JPEG, PNG, WebP)');
+            return;
+        }
+
+        // Validar tamaño (máx 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('La imagen no debe superar 5MB');
+            return;
+        }
+
+        setUploadingImage(true);
+
+        try {
+            // Crear FormData para enviar al back
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Enviar al back (que se encargará de subirlo a Cloudinary)
+            const response = await api.post("/uploadImage", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            // Guardar la URL devuelta por Cloudinary
+            setForm(prev => ({
+                ...prev,
+                url: response.data.url
+            }));
+
+            alert('Imagen subida correctamente');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al subir la imagen');
+        } finally {
+            setUploadingImage(false);
+        }
     };
 
     return (
@@ -85,28 +139,27 @@ const ItemForm = ({ title, form, setForm, onSubmit }) => {
 
             <div>
                 <label className="block mb-1 font-medium">
-                    URL Imagen
+                    Imagen
                 </label>
-
-                {/* <input
-                    type="text"
-                    name="url"
-                    value={form.url}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2"
-                /> */}
 
                 <input
                     type="file"
                     name="imagen"
                     accept="image/*"
-                    // onChange={handleFileChange}  
+                    onChange={handleFileChange}  
+                    disabled={isEditing || uploadingImage}
                     className="w-full border rounded-lg px-3 py-2"
                 />
+
+                {uploadingImage && <p className="text-sm text-blue-600">Subiendo imagen...</p>}
+                {form.url && <p className="text-sm text-green-600">✓ Imagen subida</p>}
+                {form.url && <img src={form.url} alt="preview" className="w-32 h-32 object-cover rounded mt-2" />}
+
             </div>
 
             <button
                 type="submit"
+                disabled={uploadingImage}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2"
             >
                 Guardar

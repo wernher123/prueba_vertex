@@ -61,6 +61,7 @@ const ItemEdit = () => {
             setForm={setForm}
             onSubmit={handleSubmit} 
             title="Editar Producto"
+            isEditing={true}
         />
     );
 };
