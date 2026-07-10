@@ -5,6 +5,7 @@ import api from "../api/axios";
 const ItemForm = ({ title, form, setForm, onSubmit, isEditing = false }) => {
     const navigate = useNavigate();
     const [uploadingImage, setUploadingImage] = useState(false);
+    const categories = ["hogar", "cocina", "jardineria", "medicina"];
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -128,13 +129,19 @@ const ItemForm = ({ title, form, setForm, onSubmit, isEditing = false }) => {
                     Categoría
                 </label>
 
-                <input
-                    type="text"
+                <select
                     name="categoria"
                     value={form.categoria}
                     onChange={handleChange}
                     className="w-full border rounded-lg px-3 py-2"
-                />
+                >
+                    <option value="">Selecciona una categoría</option>
+                    {categories.map(cat => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div>
