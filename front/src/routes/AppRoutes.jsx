@@ -5,16 +5,25 @@ import Login from "../pages/Login";
 import ItemEdit from "../pages/ItemEdit";
 import ItemCreate from "../pages/ItemCreate";
 import NotFound from "../pages/NotFound";
+import Register from "../pages/Register";
+import ProtectedRoute from "../components/ProtectedRoute";
+import { useAuth } from "../hooks/useAuth";
 
 const AppRoutes = () => {
+    const { isAuthenticated } = useAuth();
+    
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/items" replace />} />
+            <Route path="/" element={isAuthenticated() ? <Navigate to="/items" replace /> : <Navigate to="/login" replace />} />
 
-            <Route path="/items" element={<ItemList />} />
-            <Route path="/login" element={<Login  />} />
-            <Route path="/items/:id_item" element={<ItemEdit />} />
-            <Route path="/items/create" element={<ItemCreate />} />
+            {/* Rutas públicas */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Rutas protegidas */}
+            <Route path="/items" element={<ProtectedRoute element={<ItemList />} />} />
+            <Route path="/items/:id_item" element={<ProtectedRoute element={<ItemEdit />} />} />
+            <Route path="/items/create" element={<ProtectedRoute element={<ItemCreate />} />} />
 
             <Route path="*" element={<NotFound />} />
         </Routes>

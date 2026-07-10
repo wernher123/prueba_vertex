@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import api from "../api/axios";
 import ItemCard from "../components/ItemCard";
 
 const ItemList = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const [items, setItems] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
@@ -15,6 +17,11 @@ const ItemList = () => {
 
     const categories = ["todos", "hogar", "cocina", "jardineria", "medicina"];
 
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+    
     useEffect(() => {
         const getItems = async () => {
             try {
@@ -71,20 +78,29 @@ const ItemList = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-8">
-            <h1 className="text-3xl font-bold">
-                Catálogo de Productos
-            </h1>
+        <div className="min-h-screen bg-gray-50 p-6">
+            <div className="flex justify-between items-center mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold">
+                        Catálogo de Productos
+                    </h1>
 
-            <div className="flex justify-between items-center mb-8 mt-5 ">
+                    <button
+                        onClick={() => navigate("/items/create")}
+                        className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
+                    >
+                        Nuevo Producto
+                    </button>
+                </div>
+
                 <button
-                    onClick={() => navigate("/items/create")}
-                    className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
+                    onClick={handleLogout}
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
                 >
-                    Nuevo Producto
+                    Cerrar Sesión
                 </button>
             </div>
-
+            
             <div className="bg-white rounded-lg shadow-md p-6 mb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
